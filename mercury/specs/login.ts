@@ -18,8 +18,12 @@ describe("Login", () => {
             expect(loginPage.getPasswordFieldType()).toBe('password')
         })
         it("User enters valid Username and Password on Login page and click 'Login' button", () => {
+            browser.ignoreSynchronization = true
+           var ec = protractor.ExpectedConditions;
             loginPage.login()
             homePage = new HomePage()
+            browser.debugger()
+            expect(browser.driver.wait(ec.visibilityOf(homePage.header.nameOfTheUser), 200000)).toBe(true);
             expect(homePage.header.nameOfTheUser.getText()).toEqual(data.logonusername)
         })
     })
