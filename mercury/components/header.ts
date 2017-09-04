@@ -6,7 +6,7 @@ export class HeaderSection{
     constructor()
     {
         this.container=$('app-header')
-        this.nameOfTheUser=this.container.$('.mode-toggle-container.account')
+        this.nameOfTheUser=this.container.$('.user-menu__account')
         this.help=this.container.$('.toggle-help')
     }
 }

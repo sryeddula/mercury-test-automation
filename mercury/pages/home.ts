@@ -1,7 +1,7 @@
 import { $, ElementFinder } from 'protractor';
-import { HelpSection } from '../modules/help'
-import { HeaderSection } from '../modules/header'
-import { WorkspaceSection } from '../modules/workspace'
+import { HelpSection } from '../components/help'
+import { HeaderSection } from '../components/header'
+import { WorkspaceSection } from '../components/workspace'
 export class HomePage {
     help: HelpSection
     header: HeaderSection
