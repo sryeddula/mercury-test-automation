@@ -1,4 +1,5 @@
-import { browser, $$, $, element, by, protractor } from 'protractor'
+import { browser, $$, $, element,ElementFinder, by, protractor } from 'protractor'
+import {List} from 'linqts'
 import { LoginPage } from '../pages/login'
 import { HelpSection } from '../components/help'
 import { WorkspaceSection } from '../components/workspace'
@@ -53,14 +54,17 @@ describe("Help Page", () => {
             })
         })
         it("Click on dot icon to switch help pages", ()=>{
-            help.dots.count().then(n=>console.log(n))      
-            help.header.getText().then(previousText => {
-                browser.actions().click(help.dots.first()).perform()               
-                browser.driver.wait(Defaults.ec.visibilityOf(help.header), Defaults.ElementLookupTimeout)
-                help.header.getText().then(text =>{
-                    expect(text).not.toEqual(previousText)
+            let elms =help.dots.filter(elm=>{
+                return elm.getAttribute('class').then(text=>{
+                    return text.indexOf('active')<0
                 })
             })
+            let previousText = help.header.getText()
+            elms.first().click()
+            //browser.actions().click(elms.first()).perform()               
+            browser.driver.wait(Defaults.ec.visibilityOf(help.header), Defaults.ElementLookupTimeout)
+            let cuurentText = help.header.getText()
+            expect(cuurentText).not.toEqual(previousText)      
         })
     })
 })
