@@ -1,35 +1,66 @@
 import { browser, $$, $, element, by, protractor } from 'protractor'
 import { LoginPage } from '../pages/login'
+import { HelpSection } from '../components/help'
+import { WorkspaceSection } from '../components/workspace'
 import { HomePage } from '../pages/home'
+import { Defaults } from '../helpers/defaults'
 var data = require('../test-data/smoke-test.json')
 describe("Help Page", () => {
     var loginPage = new LoginPage()
+    var help: HelpSection
+    var workspace: WorkspaceSection
     var homePage: HomePage
 
     describe("WebTrader-889:Welcome page", () => {
-
-        it("Hello",()=>{
-            browser.get(data.url)
-        })
-        
         var bodyWidth: number
-
+        loginPage.enterCredentials(data.newuser.username, data.newuser.password)
+        loginPage.login()
         it("Login to the webtrader", () => {
-            try {
-                browser.call(() => loginPage.enterCredentials(data.newuser.username, data.newuser.password))
-                loginPage.login()
-                homePage = new HomePage()
-                var bodyWidth: number
-                var workspaceWidth: number
-                expect($('app-workspace').getSize().then(size => workspaceWidth = size.width)).toBeGreaterThan(0)
-            } catch (ex) {
-                console.log(ex)
-            }
-        })
-        it("test", () => {
             browser.ignoreSynchronization = true
-            var helpWidth: number
-            expect($('app-help').getSize().then(size => helpWidth = size.width)).toBeGreaterThan(0)
+            help = new HelpSection()
+            browser.driver.wait(Defaults.ec.visibilityOf(help.container), Defaults.ElementLookupTimeout)
+            homePage = new HomePage()
+            workspace = new WorkspaceSection()
+            help.container.getSize().then(size => {
+                expect(size.width).toBeGreaterThan(0)
+            })
+            homePage.body.getSize().then(bSize =>
+                workspace.container.getSize().then(wSize =>
+                    help.container.getSize().then(hSize => {
+                        expect(wSize.width + hSize.width).toEqual(bSize.width)
+                    })
+                )
+            )
+        })
+        it("Click on \"?\" icon", ()=>{       
+            help.container.getSize().then(previousSize => {
+                browser.actions().click(help.toggle).perform()
+                browser.driver.wait(Defaults.ec.visibilityOf(help.container), Defaults.ElementLookupTimeout)
+                help.container.getSize().then(size =>{
+                    expect(size.width).toEqual(previousSize.width)
+                    expect(size.height).toEqual(previousSize.height)
+                })
+            })
+        })
+        it("Click on any space in the default workspace", ()=>{       
+            help.container.getSize().then(previousSize => {
+                browser.actions().click(workspace.container).perform()
+                browser.driver.wait(Defaults.ec.visibilityOf(help.container), Defaults.ElementLookupTimeout)
+                help.container.getSize().then(size =>{
+                    expect(size.width).toEqual(previousSize.width)
+                    expect(size.height).toEqual(previousSize.height)
+                })
+            })
+        })
+        it("Click on dot icon to switch help pages", ()=>{
+            help.dots.count().then(n=>console.log(n))      
+            help.header.getText().then(previousText => {
+                browser.actions().click(help.dots.first()).perform()               
+                browser.driver.wait(Defaults.ec.visibilityOf(help.header), Defaults.ElementLookupTimeout)
+                help.header.getText().then(text =>{
+                    expect(text).not.toEqual(previousText)
+                })
+            })
         })
     })
 })

@@ -11,5 +11,6 @@ export class HomePage {
         this.help = new HelpSection()
         this.header = new HeaderSection()
         this.workspace = new WorkspaceSection()
+        this.body = $("body")
     }
 }

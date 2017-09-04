@@ -25,6 +25,7 @@ describe("Login", () => {
             //browser.debugger()
             expect(browser.driver.wait(Defaults.ec.visibilityOf(header.nameOfTheUser), Defaults.ElementLookupTimeout)).toBe(true);
             expect(header.nameOfTheUser.getText()).toEqual(data.logonusername)
+            browser.ignoreSynchronization = true
         })
     })
 
