@@ -1,5 +1,5 @@
 import { browser, $$, $, element,ElementFinder, by, protractor } from 'protractor'
-import {List} from 'linqts'
+import {Helper} from '../helpers/helper'
 import { LoginPage } from '../pages/login'
 import { HelpSection } from '../components/help'
 import { WorkspaceSection } from '../components/workspace'
@@ -54,11 +54,7 @@ describe("Help Page", () => {
             })
         })
         it("Click on dot icon to switch help pages", ()=>{
-            let elms =help.dots.filter(elm=>{
-                return elm.getAttribute('class').then(text=>{
-                    return text.indexOf('active')<0
-                })
-            })
+            let elms =help.dots.filter(elm=>Helper.isAttributeValueExist(elm,'class','active'))
             let previousText = help.header.getText()
             elms.first().click()
             //browser.actions().click(elms.first()).perform()               
@@ -66,5 +62,6 @@ describe("Help Page", () => {
             let cuurentText = help.header.getText()
             expect(cuurentText).not.toEqual(previousText)      
         })
+        
     })
 })
