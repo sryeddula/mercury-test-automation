@@ -18,5 +18,5 @@ exports.config = {
         allScriptsTimeout: 120000
     },
     framework: 'jasmine2',
-    specs: ['specs/login.js','specs/help-page.js']
+    specs: ['specs/help-page.js']
 }
